@@ -1,0 +1,73 @@
+syntax = "proto3";
+option java_multiple_files= true;
+option java_package = "org.example";
+
+service RegistrazioneService {
+  rpc registrazione ( RegistrazioneRequest) returns (RegistrazioneResponse){}
+  rpc mettiArticolo (MettiArticoloRequest)  returns ( MettiArticoloResponse){}
+  rpc notifica (NotificaRequest) returns (stream NotificaResponse){}
+  rpc piazzaOfferta (OffertaRequest) returns ( OffertaResponse){}
+  rpc notificaOfferta(OffertaNotificaRequest) returns ( stream OffertaNotificaResponse){}
+
+}
+// Definizione del messaggio di richiesta
+
+message OffertaNotificaRequest{
+  string  nomeArticolo= 1;
+}
+message OffertaNotificaResponse{
+  string nomeUtente = 1;
+  string cognome =2;
+  double prezzo =3;
+  string nomearticolo=4;
+  bool fineAsta = 5;
+
+}
+message RegistrazioneRequest{
+  string nome =1;
+  string cognome =2;
+}
+
+message RegistrazioneResponse{
+  bool risposta=1;
+}
+//Mette l'articolo all'asta
+message MettiArticoloRequest{
+  string nomeUtente = 1;
+  string cognome =2;
+  double prezzo =3;
+  string nomearticolo=4;
+  string orarioinizio = 5;
+  string orariofine = 6;
+}
+message MettiArticoloResponse{
+  bool risposta = 1;
+}
+message NotificaRequest{
+}
+message NotificaResponse{
+  string nomeUtente = 1;
+  string cognome =2;
+  double prezzo =3;
+  string nomearticolo=4;
+  string orarioinizio = 5;
+  string orariofine = 6;
+  bool aggiungi = 7;
+  bool modifica = 8;
+}
+
+message OffertaRequest{
+  string nomeArticolo=1;
+  string nomeUtente=2;
+  string Cognome=3;
+  double nuovaOfferta=4;
+}
+
+message OffertaResponse{
+  bool riposta =1;
+
+}
+
+
+
+

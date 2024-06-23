@@ -25,19 +25,45 @@ public class Server {
 
     public Server(){
          miaGui = new GuiServer(this);
+         RimuoviArticoli r = new RimuoviArticoli();
+         r.start();
 
     }
+    class RimuoviArticoli extends Thread{
+        @Override
+        public void run() {
+            while(true){
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                if(!listaArticoli.isEmpty()){
+                    for (Articolo a : listaArticoli){
+                        LocalTime l = LocalTime.parse(a.getFine());
+                        if (LocalTime.now().isAfter(l) || LocalTime.now().equals(l)) {
+                            ServerImple.removeArticolo(a);
+                            miaGui.aggiornaArticolo();
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     static class ServerImple extends RegistrazioneServiceGrpc.RegistrazioneServiceImplBase {
-
-        private synchronized void aggiungiArticolo(Articolo a){
+        private static synchronized void aggiungiArticolo(Articolo a){
             listaArticoli.add(a);
 
         }
-        private synchronized void removeArticolo(Articolo a){
+        private static synchronized void removeArticolo(Articolo a){
             listaArticoli.remove(a);
 
         }
+
+
         @Override
         public synchronized void registrazione(RegistrazioneRequest request, StreamObserver<RegistrazioneResponse> responseObserver) {
             String nome = request.getNome();

@@ -98,6 +98,7 @@ public class Client implements Observer{
                         double prezzo = offertaNotificaResponse.getPrezzo();
                         boolean fine = offertaNotificaResponse.getFineAsta();
                         gui.mandaNotifiche(nomeUtente, nomeArticolo, cognome, prezzo, fine);
+
                     }
                     @Override
                     public void onError(Throwable throwable) {

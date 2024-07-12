@@ -126,7 +126,7 @@ public class Client implements Observer{
                     double prezzo = notificaResponse.getPrezzo();
                     boolean aggiungi = notificaResponse.getAggiungi();
                     String nomeArticolo = notificaResponse.getNomearticolo();
-
+                    String data = "";
                     Articolo articolo = new Articolo(u, nomeArticolo, inizio, fine, prezzo,data);
                     boolean modifica = notificaResponse.getModifica();
                     gui.aggiornaGui(articolo, aggiungi, modifica);

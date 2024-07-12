@@ -7,6 +7,7 @@ import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -175,7 +176,7 @@ public class Server {
 
 
         @Override
-        public synchronized void notifica(NotificaRequest request, StreamObserver<NotificaResponse> responseObserver) {
+        public  void notifica(NotificaRequest request, StreamObserver<NotificaResponse> responseObserver) {
             NotificaThread n = new NotificaThread(responseObserver);
             n.start();
         }
@@ -223,8 +224,8 @@ public class Server {
                         }
                         for (Articolo a : ArticoloInAttesa){
                             LocalTime l = LocalTime.parse(a.getInizio());
-                            LocalTime f = LocalTime.parse(a.getFine());
-                            if ((LocalTime.now().minusMinutes(5).isBefore(l) ) || LocalTime.now().equals(l) ){
+                            LocalDate d = LocalDate.parse(a.getData());
+                            if ((LocalTime.now().minusMinutes(5).isBefore(l)  || LocalTime.now().equals(l))&& LocalDate.now().isEqual(d) ){
                                 if(!listaArticoli.contains(a)) {
                                     aggiungiArticolo(a);
                                     ArticoloInAttesa.remove(a);

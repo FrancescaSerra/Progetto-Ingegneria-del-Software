@@ -50,20 +50,20 @@ public class ClassTest {
 
     @Test
     public void testRegistracliente() {
-        boolean result = client.Registracliente("John", "Doe");
+        boolean result = client.Registracliente("Francesca", "Serra");
         assertTrue(result);
-        boolean result1 = client.Registracliente("John","Doe");
+        boolean result1 = client.Registracliente("Francesca","Serra");
         assertFalse(result1);
     }
 
     @Test
     public void testMettiArticolo() {
-        Utente utente = new Utente("John", "Doe");
-        Articolo articolo = new Articolo(utente, "TestArticolo", "01:00", "12:00", 100.0,"");
+        Utente utente = new Utente("Francesca", "Serra");
+        Articolo articolo = new Articolo(utente, "TestArticolo", "10:06", "12:00", 100.0,"2024-07-12");
         boolean result = client.mettiArticolo(articolo);
         assertTrue(result);
         Utente utente1 = new Utente("francesca", "serra");
-        Articolo articolo1 = new Articolo(utente1, "TestArticolo", "10:20", "12:00", 100.0,"");
+        Articolo articolo1 = new Articolo(utente1, "TestArticolo", "10:06", "12:00", 100.0,"2024-07-12");
         boolean result1 = client.mettiArticolo(articolo1);
         assertFalse(result1);
 

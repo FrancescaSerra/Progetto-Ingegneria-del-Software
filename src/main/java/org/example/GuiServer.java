@@ -65,7 +65,7 @@ public class GuiServer {
             userPanel.setPreferredSize(new Dimension(200, 0));
 
             // Tabella delle notifiche
-            String[] columnNames = {"Articolo", "Utente", "Start Time", "End Time", "Offerta piu alta"};
+            String[] columnNames = {"Articolo", "Utente","Data", "Start Time", "End Time", "Offerta piu alta"};
             notificationTableModel = new DefaultTableModel(columnNames, 0);
             JTable notificationTable = new JTable(notificationTableModel);
             notificationTable.setFillsViewportHeight(true);
@@ -97,11 +97,12 @@ public class GuiServer {
 
         public void aggiornaArticoli() {
             SwingUtilities.invokeLater(() -> {
-                notificationTableModel.setRowCount(0); // Pulisce la tabella
+                notificationTableModel.setRowCount(0);
                 for (Articolo a : Server.listaArticoli) {
                     Object[] row = {
                             a.getNome(),
                             a.getUtente().getNome() + " " + a.getUtente().getCognome(),
+                            a.getData(),
                             a.getInizio(),
                             a.getFine(),
                             a.getPrezzo()

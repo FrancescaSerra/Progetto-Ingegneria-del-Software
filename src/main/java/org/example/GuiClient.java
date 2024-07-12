@@ -258,7 +258,7 @@ public class GuiClient {
                         JOptionPane.showMessageDialog(AuctionWindow.this, "L'offerta è stata piazzata");
                     } else{
                         faiOfferta.dispose();
-                        JOptionPane.showMessageDialog(AuctionWindow.this, "L'offerta non può essere piazzata ");
+                        JOptionPane.showMessageDialog(AuctionWindow.this, "L'offerta non può essere piazzata ","Errore",JOptionPane.ERROR_MESSAGE);
 
                     }
 
@@ -286,7 +286,7 @@ public class GuiClient {
              JTextField startTimeField = new JTextField();
              JLabel endTimeLabel = new JLabel("Ora Fine Asta: ora:minuti");
              JTextField endTimeField = new JTextField();
-             JLabel data = new JLabel("Data yy/mm/dd:");
+             JLabel data = new JLabel("Data yyyy-mm-dd:");
              JTextField datafiled = new JTextField();
 
 
@@ -322,9 +322,9 @@ public class GuiClient {
              mettiarticolo.add(startTimeField);
              mettiarticolo.add(endTimeLabel);
              mettiarticolo.add(endTimeField);
-             mettiarticolo.add(submitButton);
              mettiarticolo.add(data);
              mettiarticolo.add(datafiled);
+             mettiarticolo.add(submitButton);
              mettiarticolo.setVisible(true);
          }
 

@@ -59,11 +59,11 @@ public class ClassTest {
     @Test
     public void testMettiArticolo() {
         Utente utente = new Utente("John", "Doe");
-        Articolo articolo = new Articolo(utente, "TestArticolo", "01:00", "12:00", 100.0);
+        Articolo articolo = new Articolo(utente, "TestArticolo", "01:00", "12:00", 100.0,"");
         boolean result = client.mettiArticolo(articolo);
         assertTrue(result);
         Utente utente1 = new Utente("francesca", "serra");
-        Articolo articolo1 = new Articolo(utente1, "TestArticolo", "10:20", "12:00", 100.0);
+        Articolo articolo1 = new Articolo(utente1, "TestArticolo", "10:20", "12:00", 100.0,"");
         boolean result1 = client.mettiArticolo(articolo1);
         assertFalse(result1);
 
@@ -72,7 +72,7 @@ public class ClassTest {
     @Test
     public void testPiazzaOfferta() {
         Utente utente = new Utente("John", "Doe");
-        Articolo articolo = new Articolo(utente, "TestArticolo", "01:00", "12:00", 100.0);
+        Articolo articolo = new Articolo(utente, "TestArticolo", "01:00", "12:00", 100.0,"");
         client.mettiArticolo(articolo);
         boolean result = client.piazzaOfferta("TestArticolo", "Fra", "se", 200.0);
         boolean result1 = client.piazzaOfferta("articoloInesistente", "Fra", "se", 200.0);

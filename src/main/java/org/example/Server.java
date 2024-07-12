@@ -5,6 +5,7 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +14,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Server {
-
 
     private static GuiServer miaGui;
 
@@ -92,16 +92,18 @@ public class Server {
             String fine = request.getOrariofine();
             String cognome = request.getCognome();
             double prezzo = request.getPrezzo();
+            String data = request.getData();
             boolean inserito = true;
             for (Articolo a : listaArticoli) {
                 if (a.getNome().equals(nomeArticolo))
                     inserito = false;
             }
-            Articolo f = new Articolo(new Utente(nomeUtente, cognome), nomeArticolo, inizio, fine, prezzo);
+            Articolo f = new Articolo(new Utente(nomeUtente, cognome), nomeArticolo, inizio, fine, prezzo,data);
             f.setVenditore(new Utente(nomeUtente,cognome));
             LocalTime l = LocalTime.parse(inizio);
+            LocalDate d = LocalDate.parse(data);
             if (inserito ){
-                if(LocalTime.now().minusMinutes(5).isBefore(l)|| LocalTime.now().equals(l))
+                if((LocalTime.now().minusMinutes(5).isBefore(l)|| LocalTime.now().equals(l)) && LocalDate.now().isEqual(d))
                     aggiungiArticolo(f);
                 else{
                     ArticoloInAttesa.add(f);
@@ -211,7 +213,7 @@ public class Server {
 
                         for (Articolo a : listaArticoli) {
                             if (!giavisit.contains(a)) {
-                                Articolo b = new Articolo(a.getUtente(),a.getNome(),a.getInizio(),a.getFine(),a.getPrezzo());
+                                Articolo b = new Articolo(a.getUtente(),a.getNome(),a.getInizio(),a.getFine(),a.getPrezzo(),a.getData());
                                 giavisit.add(b);
                                 NotificaResponse n = NotificaResponse.newBuilder().setNomeUtente(a.getUtente().getNome()).setCognome(a.getUtente().getCognome())
                                         .setNomearticolo(a.getNome()).setOrarioinizio(a.getInizio()).setOrariofine(a.getFine()).setPrezzo(a.getPrezzo())

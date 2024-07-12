@@ -63,7 +63,7 @@ public class Client implements Observer{
     public  boolean mettiArticolo(Articolo a){
         MettiArticoloRequest m = MettiArticoloRequest.newBuilder().setCognome(a.getUtente().getCognome())
                 .setNomearticolo(a.getNome()).setNomeUtente(a.getUtente().getNome())
-                .setOrariofine(a.getFine()).setOrarioinizio(a.getInizio()).setPrezzo(a.getPrezzo()).build();
+                .setOrariofine(a.getFine()).setOrarioinizio(a.getInizio()).setPrezzo(a.getPrezzo()).setData(a.getData()).build();
         MettiArticoloResponse f = blockingStub.mettiArticolo(m);
         return f.getRisposta();
     }
@@ -77,7 +77,6 @@ public class Client implements Observer{
         OffertaResponse f = blockingStub.piazzaOfferta(o);
         new notificaAsta(nomeArt).start();
         return f.getRiposta();
-
     }
 
 
@@ -127,7 +126,8 @@ public class Client implements Observer{
                     double prezzo = notificaResponse.getPrezzo();
                     boolean aggiungi = notificaResponse.getAggiungi();
                     String nomeArticolo = notificaResponse.getNomearticolo();
-                    Articolo articolo = new Articolo(u, nomeArticolo, inizio, fine, prezzo);
+
+                    Articolo articolo = new Articolo(u, nomeArticolo, inizio, fine, prezzo,data);
                     boolean modifica = notificaResponse.getModifica();
                     gui.aggiornaGui(articolo, aggiungi, modifica);
                 }

@@ -275,7 +275,7 @@ public class GuiClient {
              JFrame mettiarticolo= new JFrame("Inserisci dati Articolo");
              mettiarticolo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
              mettiarticolo.setSize(400, 300);
-             mettiarticolo.setLayout(new GridLayout(5, 2));
+             mettiarticolo.setLayout(new GridLayout(6, 2));
 
              // Campi di input
              JLabel nameLabel = new JLabel("Nome Articolo:");
@@ -286,6 +286,8 @@ public class GuiClient {
              JTextField startTimeField = new JTextField();
              JLabel endTimeLabel = new JLabel("Ora Fine Asta: ora:minuti");
              JTextField endTimeField = new JTextField();
+             JLabel data = new JLabel("Data yy/mm/dd:");
+             JTextField datafiled = new JTextField();
 
 
              // Bottone per inviare i dati
@@ -297,7 +299,8 @@ public class GuiClient {
                      String startTime = startTimeField.getText();
                      String endTime = endTimeField.getText();
                      Utente u = new Utente(nome,cognome);
-                     Articolo a = new Articolo(u,namoArticolo,startTime,endTime,price);
+                     String data = datafiled.getText();
+                     Articolo a = new Articolo(u,namoArticolo,startTime,endTime,price,data);
                      if(namoArticolo.isEmpty()|| priceField.getText().isEmpty()|| startTime.isEmpty()|| endTime.isEmpty())
                          JOptionPane.showMessageDialog(AuctionWindow.this, "Tutti i campi  sono obbligatori", "Errore", JOptionPane.ERROR_MESSAGE);
                      else if(client.mettiArticolo(a)){
@@ -320,6 +323,8 @@ public class GuiClient {
              mettiarticolo.add(endTimeLabel);
              mettiarticolo.add(endTimeField);
              mettiarticolo.add(submitButton);
+             mettiarticolo.add(data);
+             mettiarticolo.add(datafiled);
              mettiarticolo.setVisible(true);
          }
 

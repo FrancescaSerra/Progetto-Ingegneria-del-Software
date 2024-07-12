@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,6 +13,7 @@ public class Articolo {
     private String nome;
 
     private Utente venditore;
+    private String data;
 
     private String inizio;
 
@@ -21,14 +23,25 @@ public class Articolo {
 
     private AtomicInteger contatore = new AtomicInteger(0);
 
-    public Articolo(Utente u,String n,String inizio,String fine,double prezzo){
+    public Articolo(Utente u,String n,String inizio,String fine,double prezzo,String data){
         this.utente = u;
         this.nome = n;
         this.inizio= inizio;
         this.fine = fine;
         this.prezzo = prezzo;
+        this.data = data;
+
 
     }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
 
     public void setVenditore(Utente venditore) {
         this.venditore = venditore;

@@ -39,6 +39,7 @@ message MettiArticoloRequest{
   string nomearticolo=4;
   string orarioinizio = 5;
   string orariofine = 6;
+  string data = 7;
 }
 message MettiArticoloResponse{
   bool risposta = 1;

@@ -70,7 +70,7 @@ public class Server {
     }
 
 
-    static class ServerImple extends RegistrazioneServiceGrpc.RegistrazioneServiceImplBase {
+   public static class ServerImple extends RegistrazioneServiceGrpc.RegistrazioneServiceImplBase {
         private static synchronized void aggiungiArticolo(Articolo a){
             listaArticoli.add(a);
 

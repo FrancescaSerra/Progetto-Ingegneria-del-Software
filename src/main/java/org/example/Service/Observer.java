@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Service;
+
+import org.example.Entity.Articolo;
 
 public interface Observer {
 

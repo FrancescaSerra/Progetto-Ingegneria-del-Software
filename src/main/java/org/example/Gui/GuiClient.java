@@ -1,4 +1,8 @@
-package org.example;
+package org.example.Gui;
+import org.example.Entity.Articolo;
+import org.example.Service.Client;
+import org.example.Entity.Utente;
+
 import javax.swing.*;
 
 import javax.swing.border.TitledBorder;
@@ -25,7 +29,7 @@ public class GuiClient {
     }
 
 
-    public void aggiornaGui(Articolo a,boolean add,boolean modifica){
+    public void aggiornaGui(Articolo a, boolean add, boolean modifica){
         pannelloAsta.addArticolo( a ,add,modifica);
 
     }

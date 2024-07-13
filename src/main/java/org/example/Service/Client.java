@@ -1,12 +1,15 @@
-package org.example;
+package org.example.Service;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+import org.example.*;
+import org.example.Entity.Articolo;
+import org.example.Entity.Utente;
+import org.example.Gui.GuiClient;
 
 
-
-public class Client implements Observer{
+public class Client implements Observer {
 
     private String nome;
     private String Cognome;

@@ -1,4 +1,8 @@
-package org.example;
+package org.example.Gui;
+
+import org.example.Entity.Articolo;
+import org.example.Service.Server;
+import org.example.Entity.Utente;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -89,7 +93,7 @@ public class GuiServer {
         public void aggiornaUtenti() {
             SwingUtilities.invokeLater(() -> {
                 userListModel.clear();
-                for (Utente u : Server.ListadiUtenti) {
+                for (Utente u : s.getListadiUtenti()) {
                     userListModel.addElement(u.getNome() + " " + u.getCognome());
                 }
             });
@@ -98,7 +102,18 @@ public class GuiServer {
         public void aggiornaArticoli() {
             SwingUtilities.invokeLater(() -> {
                 notificationTableModel.setRowCount(0);
-                for (Articolo a : Server.listaArticoli) {
+                for (Articolo a : s.getListaArticoli()) {
+                    Object[] row = {
+                            a.getNome(),
+                            a.getUtente().getNome() + " " + a.getUtente().getCognome(),
+                            a.getData(),
+                            a.getInizio(),
+                            a.getFine(),
+                            a.getPrezzo()
+                    };
+                    notificationTableModel.addRow(row);
+                }
+                for (Articolo a : s.getArticoloInAttesa()){
                     Object[] row = {
                             a.getNome(),
                             a.getUtente().getNome() + " " + a.getUtente().getCognome(),

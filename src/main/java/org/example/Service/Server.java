@@ -1,13 +1,16 @@
-package org.example;
+package org.example.Service;
 
 import io.grpc.ServerBuilder;
 
 import io.grpc.stub.StreamObserver;
+import org.example.*;
+import org.example.Entity.Articolo;
+import org.example.Entity.Utente;
+import org.example.Gui.GuiServer;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,8 +21,8 @@ public class Server {
 
     private static GuiServer miaGui;
 
-   protected static CopyOnWriteArrayList<Utente> ListadiUtenti = new CopyOnWriteArrayList<>();
-    protected static CopyOnWriteArrayList<Articolo> listaArticoli = new CopyOnWriteArrayList<>();
+   private  static CopyOnWriteArrayList<Utente> ListadiUtenti = new CopyOnWriteArrayList<>();
+    private static CopyOnWriteArrayList<Articolo> listaArticoli = new CopyOnWriteArrayList<>();
     private static ConcurrentHashMap<StreamObserver<OffertaNotificaResponse>,ArrayList<String>> offertepiazzate = new ConcurrentHashMap<>();
     private static CopyOnWriteArrayList<Articolo> ArticoloInAttesa = new CopyOnWriteArrayList<>();
 
@@ -30,6 +33,19 @@ public class Server {
          r.start();
 
     }
+
+    public  CopyOnWriteArrayList<Articolo> getListaArticoli() {
+        return listaArticoli;
+    }
+
+    public  CopyOnWriteArrayList<Utente> getListadiUtenti() {
+        return ListadiUtenti;
+    }
+
+    public CopyOnWriteArrayList<Articolo> getArticoloInAttesa() {
+        return ArticoloInAttesa;
+    }
+
     class RimuoviArticoli extends Thread{
         @Override
         public void run() {

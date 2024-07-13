@@ -1,7 +1,5 @@
-package org.example;
+package org.example.Entity;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 

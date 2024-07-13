@@ -1,15 +1,14 @@
 package org.example;
 
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
-import io.grpc.ServerBuilder;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
-import io.grpc.testing.GrpcCleanupRule;
+import org.example.Entity.Articolo;
+import org.example.Entity.Utente;
+import org.example.Service.Client;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -26,7 +25,7 @@ public class ClassTest {
     public void setUp() throws Exception {
         // Avvia il server in-process
         server = InProcessServerBuilder.forName(SERVER_NAME)
-                .addService(new org.example.Server.ServerImple())
+                .addService(new org.example.Service.Server.ServerImple())
                 .directExecutor() // Esegue chiamate sullo stesso thread
                 .build()
                 .start();

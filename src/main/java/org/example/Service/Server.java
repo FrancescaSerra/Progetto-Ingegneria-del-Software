@@ -4,8 +4,7 @@ import io.grpc.ServerBuilder;
 
 import io.grpc.stub.StreamObserver;
 import org.example.*;
-import org.example.Entity.Articolo;
-import org.example.Entity.Utente;
+import org.example.Entity.*;
 import org.example.Gui.GuiServer;
 
 import java.io.IOException;
@@ -110,20 +109,36 @@ public class Server {
             String cognome = request.getCognome();
             double prezzo = request.getPrezzo();
             String data = request.getData();
+            String tipoArticolo = request.getTipo();
             boolean inserito = true;
             for (Articolo a : listaArticoli) {
                 if (a.getNome().equals(nomeArticolo))
                     inserito = false;
             }
-            Articolo f = new Articolo(new Utente(nomeUtente, cognome), nomeArticolo, inizio, fine, prezzo,data);
-            f.setVenditore(new Utente(nomeUtente,cognome));
+            ArticoloFactory factory;
+            switch (tipoArticolo) {
+                case "Elettronica":
+                    factory = new ElettronicaFactory();
+                    break;
+                case "Fornitura":
+                    factory = new FornitureFactory();
+                    break;
+                case "Standard":
+                    factory = new ArticoloStandardFactory();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Tipo di articolo non supportato: " + tipoArticolo);
+            }
+            Utente u = new Utente(nomeUtente,cognome);
+            Articolo a = factory.creaArticolo(u, nomeArticolo, inizio, fine, prezzo, data);
+            a.setVenditore(new Utente(nomeUtente,cognome));
             LocalTime l = LocalTime.parse(inizio);
             LocalDate d = LocalDate.parse(data);
             if (inserito ){
                 if((LocalTime.now().minusMinutes(5).isBefore(l)|| LocalTime.now().equals(l)) && LocalDate.now().isEqual(d))
-                    aggiungiArticolo(f);
+                    aggiungiArticolo(a);
                 else{
-                    ArticoloInAttesa.add(f);
+                    ArticoloInAttesa.add(a);
                 }
                 miaGui.aggiornaArticolo();
             }
@@ -222,7 +237,7 @@ public class Server {
                         if (!listaArticoli.contains(a)) {
                             iteratore.remove();
                             NotificaResponse n = NotificaResponse.newBuilder().setNomeUtente(a.getUtente().getNome()).setCognome(a.getUtente().getCognome())
-                                    .setNomearticolo(a.getNome()).setOrarioinizio(a.getInizio()).setOrariofine(a.getFine()).setPrezzo(a.getPrezzo())
+                                    .setNomearticolo(a.getNome()).setOrarioinizio(a.getInizio()).setOrariofine(a.getFine()).setPrezzo(a.getPrezzo()).setTipo(a.getTipoArticolo())
                                     .setAggiungi(false).setModifica(false).build();
                             client.onNext(n);
                         }
@@ -230,10 +245,24 @@ public class Server {
 
                         for (Articolo a : listaArticoli) {
                             if (!giavisit.contains(a)) {
-                                Articolo b = new Articolo(a.getUtente(),a.getNome(),a.getInizio(),a.getFine(),a.getPrezzo(),a.getData());
+                                ArticoloFactory factory;
+                                switch (a.getTipoArticolo()) {
+                                    case "Elettronica":
+                                        factory = new ElettronicaFactory();
+                                        break;
+                                    case "Fornitura":
+                                        factory = new FornitureFactory();
+                                        break;
+                                    case "Standard":
+                                        factory = new ArticoloStandardFactory();
+                                        break;
+                                    default:
+                                        throw new IllegalArgumentException("Tipo di articolo non supportato: " + a.getTipoArticolo());
+                                }
+                                Articolo b = factory.creaArticolo(a.getUtente(), a.getNome(), a.getInizio(), a.getFine(), a.getPrezzo(), a.getData());
                                 giavisit.add(b);
                                 NotificaResponse n = NotificaResponse.newBuilder().setNomeUtente(a.getUtente().getNome()).setCognome(a.getUtente().getCognome())
-                                        .setNomearticolo(a.getNome()).setOrarioinizio(a.getInizio()).setOrariofine(a.getFine()).setPrezzo(a.getPrezzo())
+                                        .setNomearticolo(a.getNome()).setOrarioinizio(a.getInizio()).setOrariofine(a.getFine()).setPrezzo(a.getPrezzo()).setTipo(a.getTipoArticolo())
                                         .setAggiungi(true).setModifica(false).build();
                                 client.onNext(n);
                             }
@@ -255,7 +284,7 @@ public class Server {
                                     k.setPrezzo(a.getPrezzo());
                                     k.setUtente(new Utente(a.getUtente().getCognome(),a.getUtente().getCognome()));
                                     NotificaResponse n = NotificaResponse.newBuilder().setNomeUtente(a.getUtente().getNome()).setCognome(a.getUtente().getCognome())
-                                            .setNomearticolo(a.getNome()).setOrarioinizio(a.getInizio()).setOrariofine(a.getFine()).setPrezzo(a.getPrezzo())
+                                            .setNomearticolo(a.getNome()).setOrarioinizio(a.getInizio()).setOrariofine(a.getFine()).setPrezzo(a.getPrezzo()).setTipo(a.getTipoArticolo())
                                             .setAggiungi(true).setModifica(true).build();
                                     client.onNext(n);
 
@@ -308,7 +337,6 @@ public class Server {
         Server s = new Server();
         System.out.println("il server è attivo");
         server.awaitTermination();
-
     }
 
 }

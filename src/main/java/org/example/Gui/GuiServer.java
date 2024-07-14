@@ -69,7 +69,7 @@ public class GuiServer {
             userPanel.setPreferredSize(new Dimension(200, 0));
 
             // Tabella delle notifiche
-            String[] columnNames = {"Articolo", "Utente","Data", "Start Time", "End Time", "Offerta piu alta"};
+            String[] columnNames = {"Articolo","Tipo", "Utente","Data", "Start Time", "End Time", "Offerta"};
             notificationTableModel = new DefaultTableModel(columnNames, 0);
             JTable notificationTable = new JTable(notificationTableModel);
             notificationTable.setFillsViewportHeight(true);
@@ -105,6 +105,7 @@ public class GuiServer {
                 for (Articolo a : s.getListaArticoli()) {
                     Object[] row = {
                             a.getNome(),
+                            a.getTipoArticolo(),
                             a.getUtente().getNome() + " " + a.getUtente().getCognome(),
                             a.getData(),
                             a.getInizio(),
@@ -116,6 +117,7 @@ public class GuiServer {
                 for (Articolo a : s.getArticoloInAttesa()){
                     Object[] row = {
                             a.getNome(),
+                            a.getTipoArticolo(),
                             a.getUtente().getNome() + " " + a.getUtente().getCognome(),
                             a.getData(),
                             a.getInizio(),

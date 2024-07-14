@@ -3,7 +3,7 @@ package org.example.Entity;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Articolo {
+public abstract class Articolo {
 
 
     private Utente utente ;
@@ -95,5 +95,7 @@ public class Articolo {
     public int decrementa(){
         return contatore.decrementAndGet();
     }
+    public abstract String getTipoArticolo();
+
 
 }

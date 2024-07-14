@@ -4,8 +4,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import org.example.*;
-import org.example.Entity.Articolo;
-import org.example.Entity.Utente;
+import org.example.Entity.*;
 import org.example.Gui.GuiClient;
 
 
@@ -63,10 +62,10 @@ public class Client implements Observer {
         return f.getRisposta();
     }
 
-    public  boolean mettiArticolo(Articolo a){
+    public  boolean mettiArticolo(Articolo a,String tipoArticolo){
         MettiArticoloRequest m = MettiArticoloRequest.newBuilder().setCognome(a.getUtente().getCognome())
                 .setNomearticolo(a.getNome()).setNomeUtente(a.getUtente().getNome())
-                .setOrariofine(a.getFine()).setOrarioinizio(a.getInizio()).setPrezzo(a.getPrezzo()).setData(a.getData()).build();
+                .setOrariofine(a.getFine()).setOrarioinizio(a.getInizio()).setPrezzo(a.getPrezzo()).setData(a.getData()).setTipo(tipoArticolo).build();
         MettiArticoloResponse f = blockingStub.mettiArticolo(m);
         return f.getRisposta();
     }
@@ -130,9 +129,24 @@ public class Client implements Observer {
                     boolean aggiungi = notificaResponse.getAggiungi();
                     String nomeArticolo = notificaResponse.getNomearticolo();
                     String data = "";
-                    Articolo articolo = new Articolo(u, nomeArticolo, inizio, fine, prezzo,data);
+                    String tipo =notificaResponse.getTipo();
+                    ArticoloFactory factory;
+                    switch (tipo) {
+                        case "Elettronica":
+                            factory = new ElettronicaFactory();
+                            break;
+                        case "Fornitura":
+                            factory = new FornitureFactory();
+                            break;
+                        case "Standard":
+                            factory = new ArticoloStandardFactory();
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Tipo di articolo non supportato: " + tipo);
+                    }
+                    Articolo a = factory.creaArticolo(u, nomeArticolo, inizio, fine, prezzo, data);
                     boolean modifica = notificaResponse.getModifica();
-                    gui.aggiornaGui(articolo, aggiungi, modifica);
+                    gui.aggiornaGui(a, aggiungi, modifica);
                 }
                 @Override
                 public void onError(Throwable throwable) {

@@ -1,7 +1,6 @@
 package org.example.Gui;
-import org.example.Entity.Articolo;
+import org.example.Entity.*;
 import org.example.Service.Client;
-import org.example.Entity.Utente;
 
 import javax.swing.*;
 
@@ -153,7 +152,7 @@ public class GuiClient {
             // Pannello per le offerte
             panelOfferte = new JPanel(new BorderLayout());
             panelOfferte.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Asta", TitledBorder.CENTER, TitledBorder.TOP));
-            OffertaableModel = new DefaultTableModel(new Object[]{"Utente", "Offerta", "Articolo", "Ora Fine"}, 0){
+            OffertaableModel = new DefaultTableModel(new Object[]{"Utente", "Offerta", "Articolo","Tipo", "Ora Fine"}, 0){
                 @Override
                 public boolean isCellEditable(int row ,int col){
                     return false;
@@ -185,6 +184,7 @@ public class GuiClient {
             btnPiazzaOfferta.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+
                     piazzaOfferta();
                 }
             });
@@ -215,7 +215,7 @@ public class GuiClient {
 
         protected void addArticolo(Articolo a ,boolean add,boolean modifica) {
             if (add && !modifica) {
-                OffertaableModel.addRow(new Object[]{a.getUtente().getNome() + " " + a.getUtente().getCognome(), a.getPrezzo(), a.getNome(), a.getFine()});
+                OffertaableModel.addRow(new Object[]{a.getUtente().getNome() + " " + a.getUtente().getCognome(), a.getPrezzo(), a.getNome(),a.getTipoArticolo(), a.getFine()});
                 textNotifiche.append("L'articolo " + a.getNome() + " è stato aggiunto da " + a.getUtente().getNome() + " " + a.getUtente().getCognome()+" prezzo iniziale " + a.getPrezzo() + "\n");
             }
             if (add && modifica) {
@@ -279,7 +279,7 @@ public class GuiClient {
              JFrame mettiarticolo= new JFrame("Inserisci dati Articolo");
              mettiarticolo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
              mettiarticolo.setSize(400, 300);
-             mettiarticolo.setLayout(new GridLayout(6, 2));
+             mettiarticolo.setLayout(new GridLayout(7, 2));
 
              // Campi di input
              JLabel nameLabel = new JLabel("Nome Articolo:");
@@ -292,6 +292,9 @@ public class GuiClient {
              JTextField endTimeField = new JTextField();
              JLabel data = new JLabel("Data yyyy-mm-dd:");
              JTextField datafiled = new JTextField();
+             JLabel typeLabel = new JLabel("Tipo di Articolo:");
+             String[] tipiArticoli = { "Elettronica", "Fornitura", "Standard" }; // Tipi di articoli
+             JComboBox<String> typeComboBox = new JComboBox<>(tipiArticoli);
 
 
              // Bottone per inviare i dati
@@ -304,10 +307,26 @@ public class GuiClient {
                      String endTime = endTimeField.getText();
                      Utente u = new Utente(nome,cognome);
                      String data = datafiled.getText();
-                     Articolo a = new Articolo(u,namoArticolo,startTime,endTime,price,data);
-                     if(namoArticolo.isEmpty()|| priceField.getText().isEmpty()|| startTime.isEmpty()|| endTime.isEmpty())
+                     String tipoArticolo = (String) typeComboBox.getSelectedItem();
+                     ArticoloFactory factory;
+                     switch (tipoArticolo) {
+                         case "Elettronica":
+                             factory = new ElettronicaFactory();
+                             break;
+                         case "Fornitura":
+                             factory = new FornitureFactory();
+                             break;
+                         case "Standard":
+                             factory = new ArticoloStandardFactory();
+                             break;
+                         default:
+                             throw new IllegalArgumentException("Tipo di articolo non supportato: " + tipoArticolo);
+                     }
+
+                     Articolo a = factory.creaArticolo(u, namoArticolo, startTime, endTime, price, data);
+                     if(namoArticolo.isEmpty()|| priceField.getText().isEmpty()|| startTime.isEmpty()|| endTime.isEmpty()||data.isEmpty())
                          JOptionPane.showMessageDialog(AuctionWindow.this, "Tutti i campi  sono obbligatori", "Errore", JOptionPane.ERROR_MESSAGE);
-                     else if(client.mettiArticolo(a)){
+                     else if(client.mettiArticolo(a,tipoArticolo)){
                          mettiarticolo.dispose();
                          JOptionPane.showMessageDialog(AuctionWindow.this, "L'articolo sarà messo all'asta");
                      }
@@ -328,6 +347,8 @@ public class GuiClient {
              mettiarticolo.add(endTimeField);
              mettiarticolo.add(data);
              mettiarticolo.add(datafiled);
+             mettiarticolo.add(typeLabel);
+             mettiarticolo.add(typeComboBox);
              mettiarticolo.add(submitButton);
              mettiarticolo.setVisible(true);
          }

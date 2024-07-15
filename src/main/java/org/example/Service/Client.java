@@ -7,6 +7,9 @@ import org.example.*;
 import org.example.Entity.*;
 import org.example.Gui.GuiClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Client implements Observer {
 
@@ -18,6 +21,8 @@ public class Client implements Observer {
     private final RegistrazioneServiceGrpc.RegistrazioneServiceBlockingStub blockingStub;
 
     private final RegistrazioneServiceGrpc.RegistrazioneServiceStub stub;
+
+    private List<Articolo> not = new ArrayList<>();// serve solo per il test
 
 
 
@@ -38,6 +43,11 @@ public class Client implements Observer {
         stub = RegistrazioneServiceGrpc.newStub(channel);
 
     }
+
+    public List<Articolo> getNot() {
+        return not;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -145,6 +155,7 @@ public class Client implements Observer {
                             throw new IllegalArgumentException("Tipo di articolo non supportato: " + tipo);
                     }
                     Articolo a = factory.creaArticolo(u, nomeArticolo, inizio, fine, prezzo, data);
+                    not.add(a);
                     boolean modifica = notificaResponse.getModifica();
                     gui.aggiornaGui(a, aggiungi, modifica);
                 }
@@ -157,6 +168,7 @@ public class Client implements Observer {
             };
             NotificaRequest g = NotificaRequest.newBuilder().build();
             stub.notifica(g, c);
+
         }
 
 

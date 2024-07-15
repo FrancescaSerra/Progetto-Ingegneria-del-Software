@@ -293,7 +293,7 @@ public class GuiClient {
              JLabel data = new JLabel("Data yyyy-mm-dd:");
              JTextField datafiled = new JTextField();
              JLabel typeLabel = new JLabel("Tipo di Articolo:");
-             String[] tipiArticoli = { "Elettronica", "Fornitura", "Standard" }; // Tipi di articoli
+             String[] tipiArticoli = { "Standard", "Fornitura", "Elettronica" }; // Tipi di articoli
              JComboBox<String> typeComboBox = new JComboBox<>(tipiArticoli);
 
 
